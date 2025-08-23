@@ -1,0 +1,15 @@
+{
+  "project_name": "Entity Resolution Project Template",
+  "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
+  "description": "Quick setup for a variety of ER projects",
+  "author_name": "Adrian Moses",
+  "github_username": "adrianmoses",
+  "data_sources": ["web_scraping", "api", "files", "database"],
+  "storage_backend": ["sqlite", "postgresql", "mongodb", "neo4j"],
+  "pipeline_orchestrator": ["prefect", "airflow", "simple"],
+  "search_engine": ["none", "elasticsearch", "whoosh"],
+  "nlp_required": ["yes", "no"],
+  "api_framework": ["fastapi", "flask", "django"],
+  "visualization": ["streamlit", "dash", "static"],
+  "use_docker": ["yes", "no"]
+}
