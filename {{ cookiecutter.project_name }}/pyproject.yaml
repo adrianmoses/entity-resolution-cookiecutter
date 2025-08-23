@@ -1,0 +1,283 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{cookiecutter.project_slug}}"
+version = "0.1.0"
+description = "{{cookiecutter.description}}"
+authors = [
+    {name = "{{cookiecutter.author_name}}", email = "{{cookiecutter.author_email}}"},
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+# Core dependencies - always included
+dependencies = [
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "pandas>=2.0.0",
+    "loguru>=0.7.0",
+    {% if "web_scraping" in cookiecutter.data_sources -%}
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "scrapy>=2.10.0",
+    "selenium>=4.10.0",
+    {%- endif %}
+    {% if "api" in cookiecutter.data_sources -%}
+    "httpx>=0.24.0",
+    "aiohttp>=3.8.0",
+    {%- endif %}
+    {% if cookiecutter.storage_backend == "postgresql" -%}
+    "psycopg2-binary>=2.9.0",
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.11.0",
+    {%- elif cookiecutter.storage_backend == "sqlite" -%}
+    "sqlalchemy>=2.0.0",
+    "aiosqlite>=0.19.0",
+    {%- elif cookiecutter.storage_backend == "neo4j" -%}
+    "neo4j>=5.0.0",
+    "py2neo>=2022.1.0",
+    {%- endif %}
+    {% if cookiecutter.pipeline_orchestrator == "prefect" -%}
+    "prefect>=2.10.0",
+    {%- elif cookiecutter.pipeline_orchestrator == "airflow" -%}
+    "apache-airflow>=2.6.0",
+    {%- elif cookiecutter.pipeline_orchestrator == "dagster" -%}
+    "dagster>=1.3.0",
+    "dagit>=1.3.0",
+    {%- endif %}
+    {% if cookiecutter.search_engine == "elasticsearch" -%}
+    "elasticsearch>=8.8.0",
+    {%- elif cookiecutter.search_engine == "opensearch" -%}
+    "opensearch-py>=2.2.0",
+    {%- endif %}
+    {% if cookiecutter.nlp_required == "yes" -%}
+    "spacy>=3.6.0",
+    "transformers>=4.30.0",
+    "torch>=2.0.0",
+    "scikit-learn>=1.3.0",
+    {%- endif %}
+    {% if cookiecutter.api_framework == "fastapi" -%}
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.23.0",
+    {%- elif cookiecutter.api_framework == "flask" -%}
+    "flask>=2.3.0",
+    "flask-cors>=4.0.0",
+    {%- elif cookiecutter.api_framework == "django" -%}
+    "django>=4.2.0",
+    "djangorestframework>=3.14.0",
+    {%- endif %}
+    {% if cookiecutter.visualization == "streamlit" -%}
+    "streamlit>=1.25.0",
+    "plotly>=5.15.0",
+    {%- elif cookiecutter.visualization == "dash" -%}
+    "dash>=2.11.0",
+    "plotly>=5.15.0",
+    {%- elif cookiecutter.visualization == "static" -%}
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+    "plotly>=5.15.0",
+    {%- endif %}
+]
+
+# Optional dependency groups
+[project.optional-dependencies]
+# Development dependencies
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.7.0",
+    "isort>=5.12.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+    "pre-commit>=3.3.0",
+]
+
+# Testing dependencies
+test = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.0",
+    "factory-boy>=3.3.0",
+    "faker>=19.3.0",
+]
+
+# Documentation dependencies
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.1.0",
+    "mkdocstrings[python]>=0.22.0",
+]
+
+{% if cookiecutter.nlp_required == "yes" -%}
+# NLP-specific dependencies
+nlp = [
+    "nltk>=3.8.0",
+    "textblob>=0.17.0",
+    "spacy-transformers>=1.2.0",
+    {% if cookiecutter.project_language == "spanish" -%}
+    "spacy[es]>=3.6.0",
+    {%- else -%}
+    "spacy[en]>=3.6.0",
+    {%- endif %}
+]
+{%- endif %}
+
+{% if cookiecutter.storage_backend in ["postgresql", "mysql"] -%}
+# Database-specific dependencies
+db = [
+    {% if cookiecutter.storage_backend == "postgresql" -%}
+    "asyncpg>=0.28.0",
+    {%- elif cookiecutter.storage_backend == "mysql" -%}
+    "aiomysql>=0.2.0",
+    {%- endif %}
+]
+{%- endif %}
+
+{% if cookiecutter.use_docker == "yes" -%}
+# Docker/deployment dependencies
+deploy = [
+    "gunicorn>=21.2.0",
+    "docker>=6.1.0",
+]
+{%- endif %}
+
+# Console scripts
+[project.scripts]
+{{cookiecutter.project_slug}} = "{{cookiecutter.project_slug}}.cli:app"
+{% if cookiecutter.pipeline_orchestrator == "prefect" -%}
+{{cookiecutter.project_slug}}-worker = "{{cookiecutter.project_slug}}.pipeline.worker:start_worker"
+{%- endif %}
+
+[project.urls]
+Homepage = "https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}"
+Documentation = "https://{{cookiecutter.project_slug}}.readthedocs.io"
+Repository = "https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}"
+Issues = "https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}/issues"
+
+# Tool configurations
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"{{cookiecutter.project_slug}}" = ["config/*.yaml", "templates/*.html"]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["{{cookiecutter.project_slug}}"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    {% if cookiecutter.storage_backend == "neo4j" -%}
+    "neo4j.*",
+    "py2neo.*",
+    {%- endif %}
+    {% if "web_scraping" in cookiecutter.data_sources -%}
+    "scrapy.*",
+    "selenium.*",
+    {%- endif %}
+    {% if cookiecutter.nlp_required == "yes" -%}
+    "spacy.*",
+    "transformers.*",
+    {%- endif %}
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov={{cookiecutter.project_slug}}",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    {% if cookiecutter.nlp_required == "yes" -%}
+    "nlp: marks tests that require NLP models",
+    {%- endif %}
+    {% if "web_scraping" in cookiecutter.data_sources -%}
+    "scraping: marks tests that require internet connection",
+    {%- endif %}
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__pycache__/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\bProtocol\):",
+    "@(abc\.)?abstractmethod",
+]
