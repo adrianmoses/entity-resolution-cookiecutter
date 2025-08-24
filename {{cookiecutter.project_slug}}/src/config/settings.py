@@ -13,9 +13,6 @@ class Settings(BaseSettings):
     api_host: str = "0.0.0.0"
     api_port: int = 8000
 
-    # Data sources
-    # data_sources: List[str] = {{cookiecutter.data_sources}}
-
     # NLP settings
     spacy_model: str = "en_core_web_sm"
 

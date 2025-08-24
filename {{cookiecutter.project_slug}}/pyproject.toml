@@ -32,16 +32,10 @@ dependencies = [
     "rich>=13.0.0",
     "pandas>=2.0.0",
     "loguru>=0.7.0",
-    {% if "web_scraping" in cookiecutter.data_sources -%}
     "requests>=2.31.0",
     "beautifulsoup4>=4.12.0",
-    "scrapy>=2.10.0",
-    "selenium>=4.10.0",
-    {%- endif %}
-    {% if "api" in cookiecutter.data_sources -%}
     "httpx>=0.24.0",
     "aiohttp>=3.8.0",
-    {%- endif %}
     {% if cookiecutter.storage_backend == "postgresql" -%}
     "psycopg2-binary>=2.9.0",
     "sqlalchemy>=2.0.0",
@@ -55,8 +49,6 @@ dependencies = [
     {%- endif %}
     {% if cookiecutter.pipeline_orchestrator == "prefect" -%}
     "prefect>=2.10.0",
-    {%- elif cookiecutter.pipeline_orchestrator == "airflow" -%}
-    "apache-airflow>=2.6.0",
     {%- elif cookiecutter.pipeline_orchestrator == "dagster" -%}
     "dagster>=1.3.0",
     "dagit>=1.3.0",
@@ -72,27 +64,8 @@ dependencies = [
     "torch>=2.0.0",
     "scikit-learn>=1.3.0",
     {%- endif %}
-    {% if cookiecutter.api_framework == "fastapi" -%}
     "fastapi>=0.100.0",
     "uvicorn[standard]>=0.23.0",
-    {%- elif cookiecutter.api_framework == "flask" -%}
-    "flask>=2.3.0",
-    "flask-cors>=4.0.0",
-    {%- elif cookiecutter.api_framework == "django" -%}
-    "django>=4.2.0",
-    "djangorestframework>=3.14.0",
-    {%- endif %}
-    {% if cookiecutter.visualization == "streamlit" -%}
-    "streamlit>=1.25.0",
-    "plotly>=5.15.0",
-    {%- elif cookiecutter.visualization == "dash" -%}
-    "dash>=2.11.0",
-    "plotly>=5.15.0",
-    {%- elif cookiecutter.visualization == "static" -%}
-    "matplotlib>=3.7.0",
-    "seaborn>=0.12.0",
-    "plotly>=5.15.0",
-    {%- endif %}
 ]
 
 # Optional dependency groups
@@ -140,24 +113,20 @@ nlp = [
 ]
 {%- endif %}
 
-{% if cookiecutter.storage_backend in ["postgresql", "mysql"] -%}
+{% if cookiecutter.storage_backend in ["postgresql"] -%}
 # Database-specific dependencies
 db = [
     {% if cookiecutter.storage_backend == "postgresql" -%}
     "asyncpg>=0.28.0",
-    {%- elif cookiecutter.storage_backend == "mysql" -%}
-    "aiomysql>=0.2.0",
     {%- endif %}
 ]
 {%- endif %}
 
-{% if cookiecutter.use_docker == "yes" -%}
 # Docker/deployment dependencies
 deploy = [
     "gunicorn>=21.2.0",
     "docker>=6.1.0",
 ]
-{%- endif %}
 
 # Console scripts
 [project.scripts]
@@ -224,10 +193,6 @@ module = [
     "neo4j.*",
     "py2neo.*",
     {%- endif %}
-    {% if "web_scraping" in cookiecutter.data_sources -%}
-    "scrapy.*",
-    "selenium.*",
-    {%- endif %}
     {% if cookiecutter.nlp_required == "yes" -%}
     "spacy.*",
     "transformers.*",
@@ -254,9 +219,6 @@ markers = [
     {% if cookiecutter.nlp_required == "yes" -%}
     "nlp: marks tests that require NLP models",
     {%- endif %}
-    {% if "web_scraping" in cookiecutter.data_sources -%}
-    "scraping: marks tests that require internet connection",
-    {%- endif %}
 ]
 
 [tool.coverage.run]
@@ -278,6 +240,4 @@ exclude_lines = [
     "raise NotImplementedError",
     "if 0:",
     "if __name__ == .__main__.:",
-    "class .*\bProtocol\):",
-    "@(abc\.)?abstractmethod",
 ]
