@@ -1,13 +1,13 @@
 # {{ cookiecutter.project_name }}
 
-![PyPI version](https://img.shields.io/pypi/v/{{ cookiecutter.pypi_package_name }}.svg)
-[![Documentation Status](https://readthedocs.org/projects/{{ cookiecutter.pypi_package_name }}/badge/?version=latest)](https://{{ cookiecutter.pypi_package_name }}.readthedocs.io/en/latest/?version=latest)
+![PyPI version](https://img.shields.io/pypi/v/{{ cookiecutter.project_name }}.svg)
+[![Documentation Status](https://readthedocs.org/projects/{{ cookiecutter.project_name }}/badge/?version=latest)](https://{{ cookiecutter.pypi_package_name }}.readthedocs.io/en/latest/?version=latest)
 
 {{ cookiecutter.project_short_description }}
 
-* PyPI package: https://pypi.org/project/{{ cookiecutter.pypi_package_name }}/
+* PyPI package: https://pypi.org/project/{{ cookiecutter.project_name }}/
 * Free software: MIT License
-* Documentation: https://{{ cookiecutter.pypi_package_name }}.readthedocs.io.
+* Documentation: https://{{ cookiecutter.project_name }}.readthedocs.io.
 
 ## Features
 
@@ -15,4 +15,4 @@
 
 ## Credits
 
-This package was created with [Cookiecutter](https://github.com/audreyfeldroy/cookiecutter) and the [audreyfeldroy/cookiecutter-pypackage](https://github.com/audreyfeldroy/cookiecutter-pypackage) project template.
+This package was created with [Cookiecutter](https://github.com/audreyfeldroy/cookiecutter)
