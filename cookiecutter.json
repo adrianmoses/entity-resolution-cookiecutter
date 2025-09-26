@@ -6,8 +6,15 @@
   "author_name": "Adrian Moses",
   "author_email": "adrian@adrianmoses.com",
   "github_username": "adrianmoses",
-  "storage_backend": ["sqlite", "postgresql", "neo4j"],
-  "pipeline_orchestrator": ["prefect", "dagster"],
-  "search_engine": ["none", "elasticsearch"],
-  "nlp_required": ["yes", "no"]
+  "project_type": ["basic", "search_engine", "knowledge_graph"],
+  "database": ["sqlite", "postgresql", "neo4j"],
+  "orchestrator": ["prefect", "dagster"],
+  "search_engine": ["none", "vector_hybrid", "elasticsearch"],
+  "api_framework": ["fastapi", "flask", "django", "none"],
+  "include_api_scraping": ["yes", "no"],
+  "include_web_scraping": ["yes", "no"],
+  "include_vector_search": ["yes", "no"],
+  "include_nlp": ["yes", "no"],
+  "use_docker": ["yes", "no"],
+  "use_pytest": ["yes", "no"]
 }
