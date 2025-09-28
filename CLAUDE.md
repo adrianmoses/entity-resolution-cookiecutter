@@ -63,7 +63,32 @@ pip install -e ".[test]" # With test dependencies
 ## Template Development
 
 When working on the cookiecutter template itself:
-- Template files are in `{{ cookiecutter.project_name }}/`
+- Template files are in `{{ cookiecutter.project_slug }}/`
 - Variables use Jinja2 syntax: `{{ cookiecutter.variable_name }}`
 - Conditional content uses `{% if cookiecutter.option %}` blocks
+- Post-generation cleanup handled by `hooks/post_gen_project.py`
 - Test generation with: `cookiecutter .` from repository root
+
+**Testing Template Generation:**
+```bash
+cookiecutter .                    # Generate project with prompts
+cookiecutter . --no-input         # Generate with defaults
+cookiecutter . --replay           # Replay last generation
+```
+
+**Template Structure:**
+- `cookiecutter.json` - Template configuration and variables
+- `hooks/pre_gen_project.py` - Pre-generation validation
+- `hooks/post_gen_project.py` - Post-generation cleanup (removes unused components)
+- `{{ cookiecutter.project_slug }}/` - Main template directory
+
+## Key Template Features
+
+The template conditionally includes components based on cookiecutter.json selections:
+- **Database backends**: SQLite, PostgreSQL (with optional pgvector), Neo4j, MongoDB
+- **Pipeline orchestrators**: Prefect, Dagster, or simple pipeline
+- **API frameworks**: FastAPI, Flask, Django, or none
+- **Search engines**: None, vector/hybrid, Elasticsearch
+- **Optional features**: Web scraping, API scraping, vector search, NLP, Docker
+
+Generated projects include Docker Compose configurations for selected services.
