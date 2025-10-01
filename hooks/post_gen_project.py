@@ -16,6 +16,9 @@ def main():
     # Get cookiecutter variables
     orchestrator = "{{ cookiecutter.orchestrator }}"
     api_framework = "{{ cookiecutter.api_framework }}"
+    database = "{{ cookiecutter.database }}"
+    include_web_scraping = "{{ cookiecutter.include_web_scraping }}"
+    include_api_scraping = "{{ cookiecutter.include_api_scraping }}"
     include_vector_search = "{{ cookiecutter.include_vector_search }}"
     include_nlp = "{{ cookiecutter.include_nlp }}"
 
@@ -30,6 +33,15 @@ def main():
         remove_file_or_dir(pipeline_path / "airflow_dags.py")
     if orchestrator != "simple":
         remove_file_or_dir(pipeline_path / "simple_pipeline.py")
+
+    # Remove unused database storage files
+    storage_path = base_path / "src" / "storage"
+    if database != "sqlite":
+        remove_file_or_dir(storage_path / "storage_sqlite.py")
+    if database != "postgresql":
+        remove_file_or_dir(storage_path / "storage_pg.py")
+    if database != "neo4j":
+        remove_file_or_dir(storage_path / "storage_neo4j.py")
 
     # Handle API framework - keep one, remove others
     if api_framework == "fastapi":
@@ -63,13 +75,22 @@ def main():
         remove_file_or_dir(base_path / "api_django")
         remove_file_or_dir(base_path / "api")
 
+    # Remove unused web scraping and API scraping files
+    extractors_path = base_path / "src" / "extractors"
+    if include_web_scraping != "yes":
+        remove_file_or_dir(extractors_path / "requests_beautifulsoup.py")
+        remove_file_or_dir(extractors_path / "playwright.py")
+
+    if include_api_scraping != "yes":
+        remove_file_or_dir(extractors_path / "api_extractor.py")
+
     # Remove optional features if not selected
-    if include_vector_search != "y":
+    if include_vector_search != "yes":
         remove_file_or_dir(base_path / "search" / "vector_store.py")
         remove_file_or_dir(base_path / "embeddings")
 
-    if include_nlp != "y":
-        remove_file_or_dir(base_path / "nlp")
+    if include_nlp != "yes":
+        remove_file_or_dir(base_path / "matchers")
 
     print("✅ Project structure cleaned up based on selections!")
 
