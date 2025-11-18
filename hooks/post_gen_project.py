@@ -21,6 +21,7 @@ def main():
     include_api_scraping = "{{ cookiecutter.include_api_scraping }}"
     include_vector_search = "{{ cookiecutter.include_vector_search }}"
     include_nlp = "{{ cookiecutter.include_nlp }}"
+    include_ontology_generator = "{{ cookiecutter.include_ontology_generator }}"
 
     project_slug = "{{ cookiecutter.project_slug }}"
     base_path = Path(".")
@@ -29,8 +30,8 @@ def main():
     pipeline_path = base_path / "src" / "pipeline"
     if orchestrator != "prefect":
         remove_file_or_dir(pipeline_path / "prefect_flows.py")
-    if orchestrator != "airflow":
-        remove_file_or_dir(pipeline_path / "airflow_dags.py")
+    if orchestrator != "dagster":
+        remove_file_or_dir(pipeline_path / "dagster_flows.py")
     if orchestrator != "simple":
         remove_file_or_dir(pipeline_path / "simple_pipeline.py")
 
@@ -92,6 +93,9 @@ def main():
 
     if include_nlp != "yes":
         remove_file_or_dir(src_path / "matchers")
+
+    if include_ontology_generator != "yes":
+        remove_file_or_dir(src_path / "ontology")
 
     print("✅ Project structure cleaned up based on selections!")
 
